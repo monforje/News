@@ -10,14 +10,18 @@ import { saveReaction } from './db.js';
 // Загружаем переменные окружения в начале
 dotenv.config();
 
+const DEBUG = process.env.DEBUG === 'true';
+const debug = (...args) => {
+  if (DEBUG) console.log(...args);
+};
+
 // Отладочная информация для проверки загрузки .env
-console.log('Environment variables status:');
-console.log('- NODE_ENV:', process.env.NODE_ENV);
-console.log('- PORT:', process.env.PORT);
-console.log('- NEWSAPI_KEY present:', !!process.env.NEWSAPI_KEY);
-console.log('- NEWSAPI_KEY length:', process.env.NEWSAPI_KEY?.length || 0);
-console.log('- REDIS_URL present:', !!process.env.REDIS_URL);
-console.log('- PG_CONNECTION_STRING present:', !!process.env.PG_CONNECTION_STRING);
+debug('Environment variables status:');
+debug('- NODE_ENV:', process.env.NODE_ENV);
+debug('- PORT:', process.env.PORT);
+debug('- NEWSAPI_KEY present:', !!process.env.NEWSAPI_KEY);
+debug('- REDIS_URL present:', !!process.env.REDIS_URL);
+debug('- PG_CONNECTION_STRING present:', !!process.env.PG_CONNECTION_STRING);
 
 const app = express();
 
@@ -31,7 +35,7 @@ app.use(express.json());
 
 // Логирование для отладки
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`, req.query);
+  debug(`${req.method} ${req.path}`, req.query);
   next();
 });
 
@@ -40,7 +44,7 @@ app.get('/feed', async (req, res) => {
   const x = parseFloat(req.query.x);
   const y = parseFloat(req.query.y);
   
-  console.log('Feed request with coordinates:', { x, y });
+  debug('Feed request with coordinates:', { x, y });
   
   if (isNaN(x) || isNaN(y)) {
     return res.status(400).json({ error: 'x and y required' });
@@ -52,15 +56,15 @@ app.get('/feed', async (req, res) => {
     // Проверяем кеш
     const cached = await getCache(cacheKey);
     if (cached) {
-      console.log('Returning cached feed');
+      debug('Returning cached feed');
       return res.json(JSON.parse(cached));
     }
 
-    console.log('No cache, fetching fresh articles...');
+    debug('No cache, fetching fresh articles...');
     
     // Получаем источники
     const sources = pickSources(x, y);
-    console.log('Selected sources:', sources);
+    debug('Selected sources:', sources);
     
     if (sources.length === 0) {
       return res.json([]);
@@ -68,13 +72,13 @@ app.get('/feed', async (req, res) => {
 
     // Получаем статьи
     const articles = await getArticlesBySources(sources.map(s => s.id));
-    console.log(`Got ${articles.length} articles from NewsAPI`);
+    debug(`Got ${articles.length} articles from NewsAPI`);
     
     // Показываем все полученные статьи для отладки
     if (articles.length > 0) {
-      console.log('Available articles by source:');
+      debug('Available articles by source:');
       articles.forEach(article => {
-        console.log(`  - ${article.source?.id}: ${article.title}`);
+        debug(`  - ${article.source?.id}: ${article.title}`);
       });
     }
     
@@ -96,9 +100,9 @@ app.get('/feed', async (req, res) => {
           publishedAt: art.publishedAt,
           side: src.side
         });
-        console.log(`✓ Found article for ${src.id}: ${art.title}`);
+        debug(`✓ Found article for ${src.id}: ${art.title}`);
       } else {
-        console.log(`✗ No articles found for source: ${src.id}`);
+        debug(`✗ No articles found for source: ${src.id}`);
         
         // Если нет точного совпадения, берем любую статью (для демо)
         if (articles.length > 0) {
@@ -113,12 +117,12 @@ app.get('/feed', async (req, res) => {
             publishedAt: fallbackArticle.publishedAt,
             side: src.side
           });
-          console.log(`→ Used fallback article for ${src.id}: ${fallbackArticle.title}`);
+          debug(`→ Used fallback article for ${src.id}: ${fallbackArticle.title}`);
         }
       }
     }
     
-    console.log(`Returning ${cards.length} cards`);
+    debug(`Returning ${cards.length} cards`);
     
     // Кешируем результат
     if (cards.length > 0) {
@@ -172,7 +176,7 @@ app.post('/reaction', async (req, res) => {
       return res.status(400).json({ error: 'userId, articleId, and emoji required' });
     }
     
-    console.log('Saving reaction:', { userId, emoji, articleId: articleId.substring(0, 50) + '...' });
+    debug('Saving reaction:', { userId, emoji, articleId: articleId.substring(0, 50) + '...' });
     
     await saveReaction({ userId, articleId, emoji, ts: ts || Date.now() });
     res.json({ status: 'ok' });
@@ -201,6 +205,8 @@ const HOST = '0.0.0.0'; // Привязываемся ко всем интерф
 app.listen(PORT, HOST, () => {
   console.log(`Balanced News backend listening on ${HOST}:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Local access: http://localhost:${PORT}`);
-  console.log(`Network access: http://192.168.1.123:${PORT}`);
+  if (DEBUG) {
+    console.log(`Local access: http://localhost:${PORT}`);
+    console.log(`Network access: http://192.168.1.123:${PORT}`);
+  }
 });
