@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { 
-  View, 
-  Text, 
-  FlatList, 
-  RefreshControl, 
-  TouchableOpacity, 
-  StyleSheet, 
+import {
+  View,
+  Text,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+  StyleSheet,
   SafeAreaView,
   Image,
   Alert,
@@ -13,19 +13,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
-// Определяем URL в зависимости от платформы
-const getApiBaseUrl = () => {
-  if (__DEV__) {
-    // Используйте ваш ngrok URL или туннель URL
-    return 'https://ayv0dz-2a01-620-1c4b-a400-2c-e180-9897-8f1d.ru.tuna.am'; // ЗАМЕНИТЕ НА ВАШ ТЕКУЩИЙ ТУННЕЛЬ URL
-  } else {
-    // В продакшене
-    return 'http://193.23.219.62:3001';
-  }
-};
-
-const API_BASE_URL = getApiBaseUrl();
+import { API_BASE_URL } from '../config';
 
 export default function FeedScreen({ navigation }) {
   const [cards, setCards] = useState([]);
