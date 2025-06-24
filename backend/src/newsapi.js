@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-// Временно хардкодим ключ для тестирования
-const NEWSAPI_KEY = process.env.NEWSAPI_KEY || '3e2ce6956e1c4a44bbe2097dda9c4d53';
+const NEWSAPI_KEY = process.env.NEWSAPI_KEY;
+
+if (!NEWSAPI_KEY) {
+  throw new Error('NEWSAPI_KEY environment variable is required');
+}
 const NEWSAPI_URL = 'https://newsapi.org/v2/top-headlines';
 
-console.log('NewsAPI Key loaded:', !!NEWSAPI_KEY, 'Length:', NEWSAPI_KEY?.length);
+console.log('NewsAPI Key loaded:', !!NEWSAPI_KEY, 'Length:', NEWSAPI_KEY.length);
 
 // Получить свежие статьи по списку id источников (макс. 4)
 export async function getArticlesBySources(sourceIds) {
-  if (!NEWSAPI_KEY) {
-    throw new Error('NEWSAPI_KEY not found');
-  }
   
   if (!sourceIds || sourceIds.length === 0) {
     return [];
@@ -28,9 +28,9 @@ export async function getArticlesBySources(sourceIds) {
     };
     
     console.log('NewsAPI request URL:', NEWSAPI_URL);
-    console.log('NewsAPI request params:', { 
-      ...params, 
-      apiKey: `${NEWSAPI_KEY.substring(0, 8)}...` 
+    console.log('NewsAPI request params:', {
+      ...params,
+      apiKey: '[hidden]'
     });
     
     const { data } = await axios.get(NEWSAPI_URL, { params });

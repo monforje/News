@@ -17,7 +17,7 @@ npm run dev
 ## Окружение
 - Redis (кеш)
 - PostgreSQL (реакции)
-- NewsAPI (ключ в .env)
+- NewsAPI (`NEWSAPI_KEY` в переменных окружения)
 
 ## Структура src/
 - `index.js` — основной сервер Express
