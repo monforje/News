@@ -1,7 +1,6 @@
 import { createClient } from 'redis';
 
 const REDIS_URL = process.env.REDIS_URL;
-<<<<<<< HEAD
 let client = null;
 let isRedisConnected = false;
 
@@ -90,15 +89,3 @@ export async function setCache(key, value, ttlSec) {
     }
   }
 }
-=======
-const client = createClient({ url: REDIS_URL });
-client.connect();
-
-export async function getCache(key) {
-  return await client.get(key);
-}
-
-export async function setCache(key, value, ttlSec) {
-  await client.set(key, value, { EX: ttlSec });
-} 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab

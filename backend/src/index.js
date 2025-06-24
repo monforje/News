@@ -5,7 +5,6 @@ import { pickSources } from './feed.js';
 import { getArticlesBySources } from './newsapi.js';
 import { getCache, setCache } from './cache.js';
 import { parseArticle } from './article.js';
-<<<<<<< HEAD
 import { saveReaction } from './db.js';
 
 // Загружаем переменные окружения в начале
@@ -145,62 +144,11 @@ app.get('/article', async (req, res) => {
   
   const cacheKey = `article:${encodeURIComponent(url)}`;
   
-=======
-dotenv.config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Заглушка /feed
-app.get('/feed', async (req, res) => {
-  const x = parseFloat(req.query.x);
-  const y = parseFloat(req.query.y);
-  if (isNaN(x) || isNaN(y)) {
-    return res.status(400).json({ error: 'x and y required' });
-  }
-  const cacheKey = `feed:${x.toFixed(3)}:${y.toFixed(3)}`;
   try {
     const cached = await getCache(cacheKey);
     if (cached) {
       return res.json(JSON.parse(cached));
     }
-    const sources = pickSources(x, y);
-    const articles = await getArticlesBySources(sources.map(s => s.id));
-    // Для каждого источника берём первую свежую статью
-    const cards = sources.map(src => {
-      const art = articles.find(a => a.source && a.source.id === src.id);
-      if (!art) return null;
-      return {
-        articleId: art.url,
-        title: art.title,
-        sourceId: src.id,
-        sourceName: src.name,
-        imageUrl: art.urlToImage,
-        url: art.url,
-        publishedAt: art.publishedAt,
-        side: src.side
-      };
-    }).filter(Boolean);
-    await setCache(cacheKey, JSON.stringify(cards), 1800); // 30 мин
-    res.json(cards);
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch articles', details: e.message });
-  }
-});
-
-// Заглушка /article
-app.get('/article', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: 'url required' });
-  const cacheKey = `article:${encodeURIComponent(url)}`;
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
-  try {
-    const cached = await getCache(cacheKey);
-    if (cached) {
-      return res.json(JSON.parse(cached));
-    }
-<<<<<<< HEAD
     
     const article = await parseArticle(url);
     await setCache(cacheKey, JSON.stringify(article), 86400); // 24ч
@@ -256,22 +204,3 @@ app.listen(PORT, HOST, () => {
   console.log(`Local access: http://localhost:${PORT}`);
   console.log(`Network access: http://192.168.1.123:${PORT}`);
 });
-=======
-    const article = await parseArticle(url);
-    await setCache(cacheKey, JSON.stringify(article), 86400); // 24ч
-    res.json(article);
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to parse article', details: e.message });
-  }
-});
-
-// Заглушка /reaction
-app.post('/reaction', (req, res) => {
-  res.json({ status: 'ok' }); // TODO: реализовать сохранение реакции
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Balanced News backend listening on port ${PORT}`);
-}); 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab

@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
 import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
-=======
-import { View, Text, Button } from 'react-native';
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
 
 const QUESTIONS = [
-<<<<<<< HEAD
   {
     id: 1,
     text: 'Государство должно активно регулировать экономику',
@@ -39,20 +34,11 @@ const QUESTIONS = [
     text: 'Правительство должно защищать права меньшинств',
     axis: 'y'
   },
-=======
-  'Вопрос 1: ...',
-  'Вопрос 2: ...',
-  'Вопрос 3: ...',
-  'Вопрос 4: ...',
-  'Вопрос 5: ...',
-  'Вопрос 6: ...',
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
 ];
 
 export default function QuizScreen({ navigation }) {
   const [answers, setAnswers] = useState(Array(QUESTIONS.length).fill(0));
   const [step, setStep] = useState(0);
-<<<<<<< HEAD
   const [isLoading, setIsLoading] = useState(false);
 
   const handleNext = async () => {
@@ -93,18 +79,6 @@ export default function QuizScreen({ navigation }) {
       } finally {
         setIsLoading(false);
       }
-=======
-
-  const handleNext = () => {
-    if (step < QUESTIONS.length - 1) {
-      setStep(step + 1);
-    } else {
-      // Простейший расчет bias: x = среднее первых 3, y = среднее последних 3
-      const x = answers.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
-      const y = answers.slice(3).reduce((a, b) => a + b, 0) / 3;
-      AsyncStorage.setItem('bias', JSON.stringify({ x, y }));
-      navigation.replace('Feed');
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
     }
   };
 
@@ -114,7 +88,6 @@ export default function QuizScreen({ navigation }) {
     setAnswers(arr);
   };
 
-<<<<<<< HEAD
   const getSliderValue = (value) => {
     if (value < -0.6) return 'Полностью не согласен';
     if (value < -0.2) return 'Не согласен';
@@ -245,20 +218,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#007AFF',
   },
 });
-=======
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>{QUESTIONS[step]}</Text>
-      <Slider
-        style={{ width: 200 }}
-        minimumValue={-1}
-        maximumValue={1}
-        step={0.1}
-        value={answers[step]}
-        onValueChange={setAnswer}
-      />
-      <Button title={step < QUESTIONS.length - 1 ? 'Далее' : 'Завершить'} onPress={handleNext} />
-    </View>
-  );
-} 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab

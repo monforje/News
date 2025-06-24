@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { 
   View, 
   Text, 
@@ -19,7 +18,7 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   if (__DEV__) {
     // Используйте ваш ngrok URL или туннель
-    return 'https://h73gbi-185-247-185-62.ru.tuna.am'; // ЗАМЕНИТЕ НА ВАШ ТЕКУЩИЙ ТУННЕЛЬ URL
+    return 'https://ayv0dz-2a01-620-1c4b-a400-2c-e180-9897-8f1d.ru.tuna.am'; // ЗАМЕНИТЕ НА ВАШ ТЕКУЩИЙ ТУННЕЛЬ URL
   } else {
     return 'http://193.23.219.62:3001';
   }
@@ -458,45 +457,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-=======
-import { View, Text, Button, ScrollView } from 'react-native';
-import axios from 'axios';
-
-export default function ArticleScreen({ route }) {
-  const { url } = route.params;
-  const [article, setArticle] = useState(null);
-  const [status, setStatus] = useState('');
-
-  useEffect(() => {
-    axios.get('http://localhost:3001/article', { params: { url } })
-      .then(res => setArticle(res.data));
-  }, [url]);
-
-  const sendReaction = async (emoji) => {
-    await axios.post('http://localhost:3001/reaction', {
-      userId: 'device-1', // TODO: заменить на реальный deviceId
-      articleId: url,
-      emoji,
-      ts: Date.now()
-    });
-    setStatus('Спасибо за реакцию!');
-  };
-
-  if (!article) return <Text>Загрузка...</Text>;
-
-  return (
-    <ScrollView style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{article.title}</Text>
-      <Text>{article.author}</Text>
-      <Text>{article.publishedAt}</Text>
-      <Text>{article.htmlContent}</Text>
-      <View style={{ flexDirection: 'row', marginTop: 16, justifyContent: 'space-around' }}>
-        <Button title="👍" onPress={() => sendReaction('like')} />
-        <Button title="😐" onPress={() => sendReaction('meh')} />
-        <Button title="👎" onPress={() => sendReaction('dislike')} />
-      </View>
-      {status ? <Text style={{ marginTop: 10 }}>{status}</Text> : null}
-    </ScrollView>
-  );
-} 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab

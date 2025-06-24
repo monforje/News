@@ -8,7 +8,6 @@ import FeedScreen from './screens/FeedScreen';
 import ArticleScreen from './screens/ArticleScreen';
 
 function SplashScreen({ navigation }) {
-<<<<<<< HEAD
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -49,12 +48,6 @@ function SplashScreen({ navigation }) {
         title="Начать" 
         onPress={() => navigation.replace('Quiz')} 
       />
-=======
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Balanced News</Text>
-      <Button title="Начать" onPress={() => navigation.replace('Quiz')} />
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
     </View>
   );
 }
@@ -64,14 +57,10 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-<<<<<<< HEAD
       <Stack.Navigator 
         initialRouteName="Splash" 
         screenOptions={{ headerShown: false }}
       >
-=======
-      <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Quiz" component={QuizScreen} />
         <Stack.Screen name="Feed" component={FeedScreen} />
@@ -79,7 +68,6 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-<<<<<<< HEAD
 }
 
 const styles = StyleSheet.create({
@@ -108,6 +96,3 @@ const styles = StyleSheet.create({
     color: '#666',
   },
 });
-=======
-} 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab

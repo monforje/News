@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-<<<<<<< HEAD
 // Временно хардкодим ключ для тестирования
 const NEWSAPI_KEY = process.env.NEWSAPI_KEY || '3e2ce6956e1c4a44bbe2097dda9c4d53';
 const NEWSAPI_URL = 'https://newsapi.org/v2/top-headlines';
@@ -106,23 +105,3 @@ export async function getArticlesBySources(sourceIds) {
     throw new Error(`Failed to fetch from NewsAPI: ${error.message}`);
   }
 }
-=======
-const NEWSAPI_KEY = process.env.NEWSAPI_KEY;
-const NEWSAPI_URL = 'https://newsapi.org/v2/top-headlines';
-
-// Получить свежие статьи по списку id источников (макс. 4)
-export async function getArticlesBySources(sourceIds) {
-  // sourceIds: массив строк
-  const params = {
-    sources: sourceIds.join(','),
-    from: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), // последние 3 часа
-    language: 'en',
-    sortBy: 'publishedAt',
-    pageSize: 25,
-    apiKey: NEWSAPI_KEY
-  };
-  const { data } = await axios.get(NEWSAPI_URL, { params });
-  if (!data.articles) return [];
-  return data.articles;
-} 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab

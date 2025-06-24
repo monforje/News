@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-<<<<<<< HEAD
 import { 
   View, 
   Text, 
@@ -19,7 +18,7 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   if (__DEV__) {
     // Используйте ваш ngrok URL или туннель URL
-    return 'https://h73gbi-185-247-185-62.ru.tuna.am'; // ЗАМЕНИТЕ НА ВАШ ТЕКУЩИЙ ТУННЕЛЬ URL
+    return 'https://ayv0dz-2a01-620-1c4b-a400-2c-e180-9897-8f1d.ru.tuna.am'; // ЗАМЕНИТЕ НА ВАШ ТЕКУЩИЙ ТУННЕЛЬ URL
   } else {
     // В продакшене
     return 'http://193.23.219.62:3001';
@@ -137,31 +136,11 @@ export default function FeedScreen({ navigation }) {
       ]
     );
   };
-=======
-import { View, Text, FlatList, Button, RefreshControl, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-
-export default function FeedScreen({ navigation }) {
-  const [cards, setCards] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const fetchFeed = useCallback(async () => {
-    setRefreshing(true);
-    const bias = JSON.parse(await AsyncStorage.getItem('bias'));
-    if (!bias) return;
-    const { x, y } = bias;
-    const res = await axios.get('http://193.23.219.62:3001/feed', { params: { x, y, client_ts: Date.now() } });
-    setCards(res.data);
-    setRefreshing(false);
-  }, []);
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
 
   useEffect(() => {
     fetchFeed();
   }, [fetchFeed]);
 
-<<<<<<< HEAD
   const formatTimeAgo = (dateString) => {
     try {
       const now = new Date();
@@ -437,23 +416,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-=======
-  return (
-    <View style={{ flex: 1 }}>
-      <FlatList
-        data={cards}
-        keyExtractor={item => item.articleId}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchFeed} />}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('Article', { url: item.url })} style={{ padding: 16, borderBottomWidth: 1 }}>
-            <Text>{item.title}</Text>
-            <Text>{item.sourceName} ({item.side})</Text>
-            <Text>{item.publishedAt}</Text>
-          </TouchableOpacity>
-        )}
-        ListEmptyComponent={<Text style={{ textAlign: 'center', marginTop: 40 }}>Нет новостей</Text>}
-      />
-    </View>
-  );
-} 
->>>>>>> 183eafd3d7f61f51e5c71c3312eea3d5d30de9ab
